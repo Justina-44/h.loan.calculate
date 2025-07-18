@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>房屋贷款计算器 Home Loan Calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", "微软雅黑", sans-serif;
+      background: linear-gradient(to bottom right, #eef2f7, #dbe9f4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: #ffffff;
+      padding: 30px 40px;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      max-width: 420px;
+      width: 100%;
+    }
+
+    .header {
+      background: linear-gradient(to right, #4a90e2, #8e44ad);
+      color: white;
+      padding: 15px 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-size: 0.95em;
+      color: #333;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #2980b9;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 1.2em;
+      text-align: center;
+      color: #2c3e50;
+    }
+
+    .note {
+      font-size: 0.9em;
+      color: #777;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .emoji {
+      font-size: 1.4em;
+      margin-right: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">🏡 房屋贷款计算器<br>Home Loan Calculator</div>
+
+    <div class="input-group">
+      <label for="price">🏠 房子总价（Total Price - RM）</label>
+      <input type="number" id="price" placeholder="例如：500000">
+    </div>
+
+    <div class="input-group">
+      <label for="down">💰 首付金额（Down Payment - RM）</label>
+      <input type="number" id="down" placeholder="例如：100000">
+    </div>
+
+    <div class="input-group">
+      <label for="interest">📈 年利率（Interest Rate % - 年利率）</label>
+      <input type="number" id="interest" placeholder="例如：4.2">
+    </div>
+
+    <div class="input-group">
+      <label for="years">⏳ 贷款年限（Loan Tenure - 年）</label>
+      <input type="number" id="years" placeholder="例如：30">
+    </div>
+
+    <button onclick="calculateLoan()">📊 计算 Calculate</button>
+
+    <div class="result" id="result"></div>
+    <div class="note">* 月供仅供参考 For reference only</div>
+  </div>
+
+  <script>
+    function calculateLoan() {
+      const price = parseFloat(document.getElementById('price').value);
+      const down = parseFloat(document.getElementById('down').value);
+      const rate = parseFloat(document.getElementById('interest').value);
+      const years = parseFloat(document.getElementById('years').value);
+      const result = document.getElementById('result');
+
+      if (
+        isNaN(price) || isNaN(down) || isNaN(rate) || isNaN(years) ||
+        price <= 0 || rate <= 0 || years <= 0 || down < 0 || down >= price
+      ) {
+        result.innerHTML = `<span class="emoji">⚠️</span> 请填写正确的金额 Please enter valid numbers`;
+        result.style.color = "red";
+        return;
+      }
+
+      const loanAmount = price - down;
+      const monthlyRate = rate / 12 / 100;
+      const months = years * 12;
+
+      const monthlyPayment = loanAmount * monthlyRate * Math.pow(1 + monthlyRate, months) / (Math.pow(1 + monthlyRate, months) - 1);
+
+      result.innerHTML =
+        `<span class="emoji">💼</span> 贷款总额 Loan Amount: <strong>RM ${loanAmount.toFixed(2)}</strong><br>` +
+        `<span class="emoji">📅</span> 每月供款 Monthly Payment: <strong>RM ${monthlyPayment.toFixed(2)}</strong>`;
+      result.style.color = "#2c3e50";
+    }
+  </script>
+
+</body>
+</html>
